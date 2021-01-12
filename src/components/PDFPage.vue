@@ -53,7 +53,7 @@ export default {
 
     canvasAttrs() {
       let {width, height} = this.viewport;
-      [width, height] = [width, height].map(dim => Math.ceil(dim));
+      [width, height] = [width, height].map(dim => Math.ceil(dim * 2));
       const style = this.canvasStyle;
 
       return {
@@ -81,7 +81,15 @@ export default {
 
       const {viewport} = this;
       const canvasContext = this.$el.getContext('2d');
-      const renderContext = {canvasContext, viewport};
+
+      // 解像度設定
+      const PRINT_RESOLUTION = 144;
+      // 比率算出
+      // 72dpi: webの推奨解像度
+      const PRINT_UNITS = PRINT_RESOLUTION / 72.0;
+      const transform = [PRINT_UNITS, 0, 0, PRINT_UNITS, 0, 0]
+
+      const renderContext = {canvasContext, transform, viewport};
 
       // PDFPageProxy#render
       // https://mozilla.github.io/pdf.js/api/draft/PDFPageProxy.html
